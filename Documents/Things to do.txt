@@ -1,0 +1,16 @@
+1. First thing I will check if the DML is working.  I will let you know once done.  No need for Unit Testing as we have done it exhausitively.  
+2. We can have Validation and Error handling, may be for one or two methods and a global Error Handling.
+3. After this go with GitHub and Dockers
+4. After these Kubernates
+5. Let us create the UI next
+6. CI/CD the very last step
+
+
+🧠 Any Suggestions?
+You might want to add:
+
+Health checks endpoint (/health) for Kubernetes probes
+
+Swagger UI in production-safe manner
+
+App settings management (e.g., using secrets or config maps)
