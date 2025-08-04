@@ -1,0 +1,90 @@
+version: "3.8"
+
+# ========================================================================
+# Docker Compose for Microservices Demo
+# Services: Inventory API, User API, Inventory DB, User DB
+# Each API uses ASP.NET Core and connects to its own SQL Server container.
+# ========================================================================
+
+services:
+  # -------------------------------------------------------------
+  # SQL Server for Inventory Service
+  # -------------------------------------------------------------
+  inventory-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: inventory-sqlserver
+    ports:
+      - "1433:1433"  # Expose default SQL Server port to host
+    environment:
+      ACCEPT_EULA: "Y"  # Required to accept Microsoft's license agreement
+      SA_PASSWORD: "YourStrong_Password123"  # Change this to a secure password!
+    volumes:
+      - inventory-sqldata:/var/opt/mssql  # Persist database data between runs
+
+      # ----------------------------------------
+      # Placeholder for SQL initialization files
+      # Uncomment the below line to enable
+      # Mounts all .sql files inside /docker-entrypoint-initdb.d
+      # These will be run in alphabetical order during container start
+      # ----------------------------------------
+      # - ./sql-init/Inventory/:/docker-entrypoint-initdb.d/
+
+  # -------------------------------------------------------------
+  # SQL Server for User Service
+  # -------------------------------------------------------------
+  user-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: user-sqlserver
+    ports:
+      - "1434:1433"  # Host 1434 -> Container 1433 to avoid port clash
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: "YourStrong_Password123"
+    volumes:
+      - user-sqldata:/var/opt/mssql
+
+      # ----------------------------------------
+      # Placeholder for SQL initialization files
+      # Uncomment the below line to enable
+      # ----------------------------------------
+      # - ./sql-init/User/:/docker-entrypoint-initdb.d/
+
+  # -------------------------------------------------------------
+  # Inventory API (ASP.NET Core)
+  # -------------------------------------------------------------
+  inventory-api:
+    build:
+      context: ./InventoryService  # Path to Inventory API project
+      dockerfile: Dockerfile       # Uses standard Dockerfile which is placed in the InventoryService folder
+    container_name: inventory-api
+    ports:
+      - "8080:8080"  # Host port 8080 -> Container port 8080
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=inventory-sqlserver;Database=InventoryDb;User Id=sa;Password=YourStrong_Password123;"
+    depends_on:
+      - inventory-sqlserver  # Wait until inventory-sqlserver is ready
+
+  # -------------------------------------------------------------
+  # User API (ASP.NET Core)
+  # -------------------------------------------------------------
+  user-api:
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile # Uses standard Dockerfile which is placed in the InventoryService folder
+    container_name: user-api
+    ports:
+      - "8081:8081"  # Host port 8081 -> Container port 8081
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__DefaultConnection: "Server=user-sqlserver;Database=UserDb;User Id=sa;Password=YourStrong_Password123;"
+    depends_on:
+      - user-sqlserver
+
+# -------------------------------------------------------------
+# Named Volumes for SQL Server containers
+# Ensures DB data is persisted even after container removal
+# -------------------------------------------------------------
+volumes:
+  inventory-sqldata:
+  user-sqldata:

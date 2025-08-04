@@ -48,16 +48,23 @@ public class ErrorHandlerMiddleware
             //};
 
 
-            var result = _env.IsDevelopment()
-            ? new
+            //var result = _env.IsDevelopment()
+            //? new
+            //{
+            //    message = "An unexpected error occurred.",
+            //    details = ex.Message // Show detailed error in development
+            //}
+            //: new
+            //{
+            //    message = "An unexpected error occurred. Please contact support.", // No internal details in production
+            //    details = string.Empty
+            //};
+
+
+            var result = new
             {
-                message = "An unexpected error occurred.",
-                details = ex.Message // Show detailed error in development
-            }
-            : new
-            {
-                message = "An unexpected error occurred. Please contact support.", // No internal details in production
-                details = string.Empty
+                message = ex.Message,
+                details = ex.ToString()
             };
 
             // Serialize and write the error response as JSON to the response body

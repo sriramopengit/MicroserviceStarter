@@ -7,6 +7,10 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Make the app listen on port 8081 inside the container
+builder.WebHost.UseUrls("http://*:8080");
+
+
 // Add services to the container.
 
 // Configure Serilog
@@ -37,11 +41,11 @@ app.UseMiddleware<InventoryService.Middleware.ErrorHandlerMiddleware>();
 
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+//}
 
 app.UseHttpsRedirection();
 

@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  inventory-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: inventory-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_strong_password123
+    ports:
+      - "1433:1433"
+    networks:
+      - microservice-network
+
+  inventoryservice:
+    build:
+      context: ./InventoryService
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - inventory-sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - microservice-network
+
+  user-sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: user-sqlserver
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Your_strong_password123
+    ports:
+      - "1434:1433"
+    networks:
+      - microservice-network
+
+  userservice:
+    build:
+      context: ./UserService
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - user-sqlserver
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    networks:
+      - microservice-network
+
+networks:
+  microservice-network:
+    driver: bridge

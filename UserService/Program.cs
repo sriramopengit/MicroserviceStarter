@@ -15,7 +15,10 @@ builder.Services.AddSwaggerGen();
 
 // Add DB Context
 builder.Services.AddDbContext<UserDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("UserDb")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+Console.WriteLine("Using ConnectionString: " + builder.Configuration.GetConnectionString("DefaultConnection"));
+
 
 // Add services
 builder.Services.AddControllers();

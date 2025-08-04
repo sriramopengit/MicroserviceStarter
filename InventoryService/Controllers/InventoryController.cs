@@ -53,7 +53,7 @@ namespace InventoryService.Controllers
 
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id,[FromBody]InventoryItem item)
+        public async Task<IActionResult> Update(string id,[FromBody]InventoryItem item)
         {
             item.Id = id;
 

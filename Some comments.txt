@@ -1,0 +1,41 @@
+docker-compose down -v --remove-orphans
+docker image prune -af
+docker volume prune -f
+docker builder prune -af
+
+down -v --remove-orphans ensures old containers and volumes don’t interfere.
+
+prune commands clean up any stale images/layers/volumes.
+
+build --no-cache forces Docker to re-read Dockerfiles and rebuild images based on your latest changes.
+
+up -d starts fresh containers with your updated port mappings.
+
+
+
+docker-compose build --no-cache
+docker-compose up -d
+
+You're clearly getting the hang of this. Let me know if you'd like to script this entire EF Core + Docker + migration setup in a reliable way for future use!
+
+✅ To update only userservice in Docker Compose
+Run this from your project root (where docker-compose.yml exists):
+
+docker-compose up --build --no-deps -d userservice
+🔍 What this does:
+--build → Rebuilds the image for userservice
+
+--no-deps → Doesn’t rebuild or restart its dependencies like sqldata
+
+-d → Runs in detached mode (in background)
+
+
+
+
+docker-compose stop userservice-1
+docker-compose rm -f userservice-1
+docker-compose up -d userservice-1
+
+docker rmi microservicestarter-userservice
+docker-compose build --no-cache microservicestarter-userservice
+

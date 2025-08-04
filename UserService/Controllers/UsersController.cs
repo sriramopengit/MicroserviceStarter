@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using UserService.Data;
 using UserService.Models;
 
@@ -30,13 +31,29 @@ namespace UserService.Controllers
             return Ok(user);
         }
 
+        //[HttpPost]
+        //public IActionResult Create(User user)
+        //{
+        //    _context.Users.Add(user);
+        //    _context.SaveChanges();
+        //    return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+        //}
+
         [HttpPost]
         public IActionResult Create(User user)
         {
-            _context.Users.Add(user);
+            var newUser = new User
+            {
+                Name = user.Name,
+                Email = user.Email
+            };
+
+            _context.Users.Add(newUser);
             _context.SaveChanges();
-            return CreatedAtAction(nameof(GetById), new { id = user.Id }, user);
+
+            return CreatedAtAction(nameof(GetById), new { id = newUser.Id }, newUser);
         }
+
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, User updatedUser)
@@ -60,5 +77,21 @@ namespace UserService.Controllers
             _context.SaveChanges();
             return NoContent();
         }
+
+        [HttpGet("db-test")]
+        public async Task<IActionResult> TestDbConnection()
+        {
+            try
+            {
+                using var connection = new SqlConnection("Server=user-sqlserver;Database=UserDB;User Id=sa;Password=Your_strong_password123;TrustServerCertificate=True;");
+                await connection.OpenAsync();
+                return Ok("✅ Connected to DB!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"❌ DB connection failed: {ex.Message}");
+            }
+        }
+
     }
 }
