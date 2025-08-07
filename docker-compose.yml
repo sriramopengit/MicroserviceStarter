@@ -1,6 +1,16 @@
 version: '3.8'
 
+# ============================================================
+# Docker Compose setup for Inventory and User microservices.
+# Each service runs its own DB container and ASP.NET backend.
+# Includes commented helper container to run init SQL scripts.
+# Ready for extension to other DB engines (MySQL/PostgreSQL).
+# ============================================================
+
 services:
+  # ------------------------------------------------------------
+  # SQL Server for InventoryService
+  # ------------------------------------------------------------
   inventory-sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: inventory-sqlserver
@@ -12,6 +22,14 @@ services:
     networks:
       - microservice-network
 
+    # Mount persistent volume and init SQL script
+    # volumes:
+    #   - inventory-sqldata:/var/opt/mssql
+    #   - ./inventory-init.sql:/init/inventory-init.sql
+
+  # ------------------------------------------------------------
+  # InventoryService - ASP.NET Core Web API
+  # ------------------------------------------------------------
   inventoryservice:
     build:
       context: ./InventoryService
@@ -21,10 +39,13 @@ services:
     depends_on:
       - inventory-sqlserver
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - microservice-network
 
+  # ------------------------------------------------------------
+  # SQL Server for UserService
+  # ------------------------------------------------------------
   user-sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
     container_name: user-sqlserver
@@ -36,6 +57,14 @@ services:
     networks:
       - microservice-network
 
+    # Mount persistent volume and init SQL script
+    # volumes:
+    #   - user-sqldata:/var/opt/mssql
+    #   - ./user-init.sql:/init/user-init.sql
+
+  # ------------------------------------------------------------
+  # UserService - ASP.NET Core Web API
+  # ------------------------------------------------------------
   userservice:
     build:
       context: ./UserService
@@ -45,10 +74,65 @@ services:
     depends_on:
       - user-sqlserver
     environment:
-      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_ENVIRONMENT=Production
     networks:
       - microservice-network
 
+  # ------------------------------------------------------------
+  # (Commented) Helper container to run init scripts using sqlcmd
+  #
+  # This container runs user-init.sql after user-sqlserver is up.
+  # Similarly, inventory-init.sql can be run for inventory-sqlserver.
+  # Both SQL script files must be located in the same directory
+  # as this docker-compose.yml file.
+  #
+  # Example script content:
+  #   user-init.sql         -> setup for user DB (tables, seed data)
+  #   inventory-init.sql    -> (sample) setup for inventory DB
+  # ------------------------------------------------------------
+
+  # init-user-db:
+  #   image: mcr.microsoft.com/mssql-tools
+  #   depends_on:
+  #     - user-sqlserver
+  #   entrypoint: ["/bin/bash", "-c"]
+  #   command:
+  #     - |
+  #       echo "Waiting for SQL Server to be available...";
+  #       sleep 20;
+  #       /opt/mssql-tools/bin/sqlcmd -S user-sqlserver -U sa -P 'Your_strong_password123' -i /init/user-init.sql;
+  #       echo "User database initialized.";
+  #   volumes:
+  #     - ./user-init.sql:/init/user-init.sql
+  #   networks:
+  #     - microservice-network
+
+  # init-inventory-db:
+  #   image: mcr.microsoft.com/mssql-tools
+  #   depends_on:
+  #     - inventory-sqlserver
+  #   entrypoint: ["/bin/bash", "-c"]
+  #   command:
+  #     - |
+  #       echo "Waiting for SQL Server to be available...";
+  #       sleep 20;
+  #       /opt/mssql-tools/bin/sqlcmd -S inventory-sqlserver -U sa -P 'Your_strong_password123' -i /init/inventory-init.sql;
+  #       echo "Inventory database initialized.";
+  #   volumes:
+  #     - ./inventory-init.sql:/init/inventory-init.sql
+  #   networks:
+  #     - microservice-network
+
+# ------------------------------------------------------------
+# Custom bridge network for all services
+# ------------------------------------------------------------
 networks:
   microservice-network:
     driver: bridge
+
+# ------------------------------------------------------------
+# Volumes for persistent SQL Server data
+# ------------------------------------------------------------
+# volumes:
+#   inventory-sqldata:
+#   user-sqldata:
