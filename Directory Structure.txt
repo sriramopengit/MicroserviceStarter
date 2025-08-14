@@ -1,0 +1,23 @@
+Directory Structure
+
+MicroserviceStarter
+      |
+      |_ InventoryService
+      |         |
+      |         | Dockerfile
+      |         | .dockerignore
+      |         | InventoryService.csproj
+      |
+      |_ UserService
+      |         |
+      |         | Dockerfile
+      |         | .dockerignore
+      |         | UserService.csproj
+      |_ docker-compose.yml
+      |_ Microservices.sln    
+      
+
+
+
+
+   

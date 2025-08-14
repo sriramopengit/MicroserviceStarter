@@ -58,3 +58,23 @@ CI/CD (GitHub Actions or Azure DevOps)
 Cloud deployments (Azure, AWS, etc.)
 
 Monitoring & logging (e.g., Prometheus, ELK stack)
+
+
+=================================
+We’ve been covering microservices with Docker, moved through environment variables, .env files (just touched - not dived into), override files (just touched - not dived into), and were about to go into sharing & transporting Docker images before Kubernetes.
+
+We’ll go step-by-step on sharing & transporting Docker images, starting with the most common way — pushing to Docker Hub — and then cover private registries and offline methods.
+
+Here’s the roadmap:
+
+Tagging your image for sharing
+
+Pushing to Docker Hub (public or private repo)
+
+Pushing to a private registry (e.g., AWS ECR, Azure Container Registry, GCP Artifact Registry)
+
+Exporting/importing images offline (docker save / docker load)
+
+Exporting containers instead of images (docker export / docker import)
+
+Good practices for image sharing (security, size optimization)
