@@ -78,3 +78,57 @@ Exporting/importing images offline (docker save / docker load)
 Exporting containers instead of images (docker export / docker import)
 
 Good practices for image sharing (security, size optimization)
+
+=================================================
+16/08/25
+========
+⏳ Timeline
+Day 1 (Tomorrow)
+
+Bind Mounting config files
+
+Export & Import containers
+
+Day 2 (~1–1.5 hrs) – Docker Image Optimization
+
+Reduce image size (multi-stage builds, Alpine base images, trimming unused layers)
+
+Caching layers for faster builds
+
+Inspecting image layers (docker history)
+
+Pushing optimized image to Docker Hub (optional)
+
+Day 3 onwards – Decision Point
+🚦 Docker Compose Advanced vs Kubernetes
+
+Docker Compose Advanced (1 day)
+
+Conditional profiles (dev/test/prod)
+
+Scaling services (docker compose up --scale)
+
+Health checks in Compose
+
+Networking between containers
+
+Using secrets & configs
+
+
+Kubernetes (3–5 days just to get comfortable)
+
+You’ll need to learn Pods, Deployments, Services, ConfigMaps, Secrets
+
+Then kubectl commands
+
+Then Minikube / Azure AKS
+
+Then deploy the same app to Kubernetes
+
+💡 My Suggestion
+
+If your goal is production-ready orchestration → Jump to Kubernetes after tomorrow’s session.
+
+If you want to master Compose before Kubernetes → Spend 1 extra day on Docker Compose advanced first.
+
+Because Kubernetes replaces a lot of what Compose does, but if you understand advanced Compose, Kubernetes networking and scaling concepts will click faster.
