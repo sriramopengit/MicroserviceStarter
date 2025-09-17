@@ -23,7 +23,7 @@ Running __dockercompose__ file spins the following containers:
 The port mapping for each of these containers to the localhost are as below:
 
 | Container Name | Container Port | Localhost Port |
-| :============= | :============= | :============= |
+| :------------- | :------------- | :------------- |
 | userservice-1  | 8081           | 8081           |
 
 
