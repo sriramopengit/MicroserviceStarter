@@ -25,6 +25,6 @@ The port mapping for each of these containers to the localhost are as below:
 | Container Name | Container Port | Localhost Port |
 | :------------- | :------------- | :------------- |
 | userservice-1  | 8081           | 8081           |
-
+| inventoryservice-1 | 8080 | 8080 |
 
 
