@@ -20,11 +20,13 @@ Running __dockercompose__ file spins the following containers:
   - user-sqlserver (container for Microsoft SQL Server, that holds data pertaining to User Service)
   - inventory-sqlserver (container for Microsoft SQL Server, that holds data pertaining to Inventory Service)
 
-The port mapping for each of these containers to the localhost are as below:
+The __Port Mapping__ for each of these containers to the localhost are as below:
 
-| Container Name | Container Port | Localhost Port |
+| Container Name | Localhost Port | Container Port |
 | :------------- | :------------- | :------------- |
 | userservice-1  | 8081           | 8081           |
 | inventoryservice-1 | 8080 | 8080 |
+| user-sqlserver | 1434 | 1433 |
+| inventory-sqlserver | 1433 | 1433 |
 
-
+This project also has __Powershell__ scripts to __push images to Docker Hub__ and a separate script to __create a private registry to push and pull images to and from the private registry__.
