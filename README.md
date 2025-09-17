@@ -20,7 +20,11 @@ Running __dockercompose__ file spins the following containers:
   - user-sqlserver (container for Microsoft SQL Server, that holds data pertaining to User Service)
   - inventory-sqlserver (container for Microsoft SQL Server, that holds data pertaining to Inventory Service)
 
-The port mapping for each of these services are as below:
+The port mapping for each of these containers to the localhost are as below:
+
+| Container Name | Container Port | Localhost Port |
+| :============= | :============= | :============= |
+| userservice-1  | 8081           | 8081           |
 
 
 
